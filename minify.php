@@ -115,16 +115,35 @@ class FileMinifier
     }
 
     /**
-     * Minify PHP content
+     * Minify PHP content with special handling for Pest files
      */
     private static function minifyPHP($content)
     {
+        // Detect if this is a Pest file before removing comments
+        $isPest = self::isPestFile($content);
+        
         // Remove comments
         $content = preg_replace('/\/\/[\s\S]+?$|\/\*[\s\S]*?\*\//m', '', $content);
-        // Remove whitespace
-        $content = preg_replace('/\s+/', ' ', $content);
-        // Remove spaces around operators
+        
+        if ($isPest) {
+            // For Pest files, preserve test structure better
+            // First transform all whitespace to single spaces
+            $content = preg_replace('/\s+/', ' ', $content);
+            
+            // Add newlines between test blocks for readability and to avoid issues
+            $content = preg_replace('/}[\s]*\)\s*;[\s]*test/', '});' . "\n" . 'test', $content);
+            $content = preg_replace('/}[\s]*\)\s*;[\s]*describe/', '});' . "\n" . 'describe', $content);
+            
+            // Ensure tests end with a newline
+            $content = preg_replace('/}[\s]*\)\s*;[\s]*$/', '});' . "\n", $content);
+        } else {
+            // For regular PHP, simply remove all excessive whitespace
+            $content = preg_replace('/\s+/', ' ', $content);
+        }
+        
+        // Remove spaces around operators (applies to both)
         $content = preg_replace('/\s*([\(\)\{\}\[\],;:=><])\s*/', '$1', $content);
+        
         return trim($content);
     }
 
@@ -200,9 +219,18 @@ class FileMinifier
         $content = preg_replace('/;(?=\s*})/', '', $content);
         return trim($content);
     }
-
-    // [Rest of the class methods: process, processDirectory, processFile, etc. remain the same]
-    // ... [Previous implementation]
+    
+    
+    /**
+     * Check if a PHP file is a Pest test file
+     */
+    private static function isPestFile($content)
+    {
+        // Pest files typically use the test() function pattern
+        return preg_match('/test\s*\(\s*[\'"][^\'"]*[\'"]\s*,\s*function\s*\(/i', $content) === 1 ||
+               // Also detect when using describe() function from Pest
+               preg_match('/describe\s*\(\s*[\'"][^\'"]*[\'"]\s*,\s*function\s*\(/i', $content) === 1;
+    }
 
     public static function run($argv)
     {
