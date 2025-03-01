@@ -1,4 +1,4 @@
-# minifier
+# minifier: Streamline Your Code, Optimize Your Tokens
 A powerful PHP-based minification utility that intelligently reduces file sizes by eliminating unnecessary elements while preserving functionality. Designed with precision for developers who value efficiency and optimization.
 The utility is for reducing file sizes by removing comments, whitespace, and unnecessary characters from PHP, SQL, JavaScript, Vue, and CSS files. Especially useful for Claude AI projects to reduce token count and optimize usage of API pricing plans.
 
