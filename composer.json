@@ -1,0 +1,17 @@
+{
+    "name": "evklid/common",
+    "autoload": {
+        "psr-4": {
+            "Evklid\\Common\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Николай Зубков",
+            "email": "zubkov.rabota@gmail.com"
+        }
+    ],
+    "require": {
+        "phpunit/phpunit": "10"
+    }
+}

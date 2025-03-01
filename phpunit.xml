@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    bootstrap="tests/bootstrap.php"
+    colors="true"
+    stopOnFailure="false"
+    testdox="true">
+    <testsuites>
+        <testsuite name="FileMinifier">
+            <file>tests/FileMinifierTest.php</file>
+            <file>tests/FileMinifierIntegrationTest.php</file>
+            <file>tests/FileMinifierLaravelTest.php</file>
+            <file>tests/FileMinifierEdgeCaseTest.php</file>
+        </testsuite>
+    </testsuites>
+    <php>
+        <const name="PHPUNIT_TESTING" value="true"/>
+        <ini name="display_errors" value="On"/>
+        <ini name="error_reporting" value="E_ALL"/>
+    </php>
+</phpunit>
